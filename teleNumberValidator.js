@@ -1,55 +1,20 @@
 function telephoneCheck(str) {
-	//10 digits
-	//11 digits (must start with a 1)
-	//No symbols except "-" and "()" and spaces, brackets only groups first 3
+	//m for multiline match when testing, g for global all instances
+	//^ match pattern start of the string, $ match pattern end of the string
+	//? means optional
+	//First capture group(country code) - So 1 with or without a space(\s) is valid
+	//Second  (Area code) - Can have parentheses or none
+	//Use escape character \ cause we normally use parenthese for capture groups, so to actually test
+	//the parentheses in a string we need to escape that character using \
+	//\d for numbers, {3} max 3, then we escape again for the closing parentheses
+	//but the parentheses are optioional so we add an or (|) 3 digits again with no parentheses
+	//then we used square brackets [] to much any character in the set
+	//so any space (\s) or dash {\-} but its optional so we add a ?
+	//then another 3 digits and optional dashes and space
+	//then final 4 digits
 
-	let startsWithOne = /^1/g;
-	let elevenDigits = /^[1-9]{1,11}$/g;
-	let tenDigits = /^[1-9]{1,10}$/g;
-	let correctSymbols = /\s|\-/g;
-	let correctBrackets = /\(\w\w\w\)/g;
-	let spaces = /\s/g;
-	let numbers = /\w/g;
-
-	console.log(str.match(numbers).length);
-
-	let testS = str.replace(correctSymbols, "");
-	let testSS = testS.replace(correctBrackets, "");
-
-	console.log(correctBrackets.test(str));
-	//
-
-	if (str.match(numbers).length !== 10 && str.match(numbers).length !== 11) {
-		return false;
-	} else if (
-		str.match(numbers).length === 11 &&
-		startsWithOne.test(str) === false
-	) {
-		return false;
-	}
-	// If starts with 1
-	// if (correctBrackets.test(str) === true && startsWithOne.test(str) === true && str.match(numbers).length <= 11){
-	//   return true
-	// } else if (startsWithOne.test(str) === true && str.match(numbers).length === 11 && correctBrackets.test(str) === true ){
-	//   return true
-	// }else if (correctBrackets.test(str) === true && str.match(numbers).length === 10 ) {
-	//   return true
-	//   } else if (startsWithOne.test(str) === true && str.match(numbers).length === 11) {
-	//     return true
-	//   } else if ()
-
-	// } else if (str.match(numbers).length === 10) {
-	//   return true
-	// }
-	// } else if (startsWithOne.test(testS) === true && elevenDigits.test(testS) === true){
-	// return true
-	//  } else if (testS.length === 10) {
-	//    return true
-	//  } else if (testSS.length === 7 || correctBrackets.test(testS) === true) {
-	// return true
-	//   }
-
-	return true;
+	var regex = /^(1\s?)?(\(\d{3}\)|\d{3})[\s\-]?\d{3}[\s\-]?\d{4}$/g;
+	return regex.test(str);
 }
 
-console.log(telephoneCheck("1 555-555-5555"));
+telephoneCheck();
